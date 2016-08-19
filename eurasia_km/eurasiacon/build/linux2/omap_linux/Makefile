@@ -1,5 +1,5 @@
 ########################################################################### ###
-#@Title         Root makefile for OMAP4430 Linux.  Builds everything else.
+#@Title         Root makefile for TI Linux.  Builds everything else.
 #@Copyright     Copyright (c) Imagination Technologies Ltd. All Rights Reserved
 #@License       Dual MIT/GPLv2
 #
@@ -39,9 +39,9 @@
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ### ###########################################################################
 
-# If a product wasn't specified, we're a J6 EVM.
-#
-TARGET_PRODUCT ?= jacinto6evm
+ifeq (${TARGET_PRODUCT},)
+  $(error "Please specify TARGET_PRODUCT")
+endif
 
 PVRSRV_NEED_PVR_DPF := 1
 PVRSRV_NEW_PVR_DPF := 1
