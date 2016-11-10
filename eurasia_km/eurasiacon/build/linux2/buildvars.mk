@@ -48,7 +48,7 @@
 
 # These flags are used for kernel, User C and User C++
 #
-COMMON_FLAGS := -W -Wall
+COMMON_FLAGS := -W -Wall -fno-PIE
 
 # Some GCC warnings are C only, so we must mask them from C++
 #
