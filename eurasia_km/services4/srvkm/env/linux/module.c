@@ -47,8 +47,11 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endif
 #endif
 
+#if 0
+	// XXX this is done in services4/srvkm/env/linux/pvr_drm.c
 #if (AM_VERSION != 5)
 #include <linux/platform_data/sgx-omap.h>
+#endif
 #endif
 
 #if defined(SUPPORT_DRI_DRM) && !defined(SUPPORT_DRI_DRM_PLUGIN)
@@ -364,6 +367,8 @@ static int __devinit PVRSRVDriverProbe(LDM_DEV *pDevice, const struct pci_device
 #endif
 
 	PVR_TRACE(("PVRSRVDriverProbe(pDevice=%p)", pDevice));
+#if 0
+	// XXX this is done in services4/srvkm/env/linux/pvr_drm.c
 #if (AM_VERSION != 5)
 	if (pdata && pdata->deassert_reset) {
 		ret = pdata->deassert_reset(pDevice, pdata->reset_name);
@@ -371,6 +376,7 @@ static int __devinit PVRSRVDriverProbe(LDM_DEV *pDevice, const struct pci_device
 			dev_err(dev, "Unable to reset SGX!\n");
 		}
 	}
+#endif
 #endif
 
 #if 0   /* INTEGRATION_POINT */
