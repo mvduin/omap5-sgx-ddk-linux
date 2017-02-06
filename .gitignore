@@ -1,0 +1,5 @@
+# build output
+/eurasia_km/eurasiacon/binary2_omap_linux_release/
+
+# staging area for packaging
+/lib/
