@@ -2784,9 +2784,9 @@ static void OSTimerCallbackBody(TIMER_CALLBACK_DATA *psTimerCBData)
  @Return   NONE
 
 ******************************************************************************/
-static IMG_VOID OSTimerCallbackWrapper(IMG_UINTPTR_T uiData)
+static void OSTimerCallbackWrapper(struct timer_list *timer)
 {
-    TIMER_CALLBACK_DATA	*psTimerCBData = (TIMER_CALLBACK_DATA*)uiData;
+    TIMER_CALLBACK_DATA	*psTimerCBData = from_timer(psTimerCBData, timer, sTimer);
     
 #if defined(PVR_LINUX_TIMERS_USING_WORKQUEUES) || defined(PVR_LINUX_TIMERS_USING_SHARED_WORKQUEUE)
     int res;
@@ -2887,12 +2887,7 @@ IMG_HANDLE OSAddTimer(PFN_TIMER_FUNC pfnTimerFunc, IMG_VOID *pvData, IMG_UINT32 
                                 ?	1
                                 :	((HZ * ui32MsTimeout) / 1000);
     /* initialise object */
-    init_timer(&psTimerCBData->sTimer);
-    
-    /* setup timer object */
-    /* PRQA S 0307,0563 1 */ /* ignore warning about inconpartible ptr casting */
-    psTimerCBData->sTimer.function = (IMG_VOID *)OSTimerCallbackWrapper;
-    psTimerCBData->sTimer.data = (IMG_UINTPTR_T)psTimerCBData;
+    timer_setup(&psTimerCBData->sTimer, OSTimerCallbackWrapper, 0);
     
     return (IMG_HANDLE)(ui + 1);
 }
@@ -2959,11 +2954,8 @@ PVRSRV_ERROR OSEnableTimer (IMG_HANDLE hTimer)
     /* Start timer arming */
     psTimerCBData->bActive = IMG_TRUE;
 
-    /* set the expire time */
-    psTimerCBData->sTimer.expires = psTimerCBData->ui32Delay + jiffies;
-
     /* Add the timer to the list */
-    add_timer(&psTimerCBData->sTimer);
+    mod_timer(&psTimerCBData->sTimer, psTimerCBData->ui32Delay + jiffies);
     
     return PVRSRV_OK;
 }
